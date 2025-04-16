@@ -1,6 +1,6 @@
 package com.elektra.technical.test.elektra.repositories;
 
-import com.elektra.technical.test.elektra.model.Employee;
+import com.elektra.technical.test.elektra.models.Employee;
 import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.ResultSet;

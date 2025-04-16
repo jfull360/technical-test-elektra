@@ -1,4 +1,4 @@
-package com.elektra.technical.test.elektra.model;
+package com.elektra.technical.test.elektra.models;
 
 /**
  *
