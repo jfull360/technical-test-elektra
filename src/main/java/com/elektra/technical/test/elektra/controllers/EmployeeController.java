@@ -31,8 +31,12 @@ public class EmployeeController {
 
     public Map<String, Object> getAllEmployees() throws Exception {
         List<Employee> employees = service.getAllEmployees();
-        //
         return buildResponse(200, employees);
+    }
+
+    public Map<String, Object> getTop10EmployeesWithBetterSalaries() throws Exception {
+        List<Employee> top10 = service.getTop10EmployeesWithBetterSalaries();
+        return buildResponse(200, top10);
     }
 
     public Map<String, Object> getEmployeeById(int id) throws Exception {
@@ -68,4 +72,3 @@ public class EmployeeController {
         return response;
     }
 }
-

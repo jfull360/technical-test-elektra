@@ -47,6 +47,10 @@ public class Main implements RequestStreamHandler {
                         //Si no se obtiene un parametro se enviaran todos los empleados
                         //If a parameter is not obtained, all employees will be sent.
                         response = controller.getAllEmployees();
+                    } else if (path.equals("/employees/salary/top")) {
+                        //Si no se obtiene un parametro se enviaran todos los empleados
+                        //If a parameter is not obtained, all employees will be sent.
+                        response = controller.getAllEmployees();
                     }
                     break;
 
