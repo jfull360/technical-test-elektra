@@ -8,6 +8,7 @@ import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 /**
  *
@@ -34,31 +35,36 @@ public class EmployeeController {
         return buildResponse(200, employees);
     }
 
-    public Map<String, Object> getTop10EmployeesWithBetterSalaries() throws Exception {
-        List<Employee> top10 = service.getTop10EmployeesWithBetterSalaries();
-        return buildResponse(200, top10);
-    }
-
     public Map<String, Object> getEmployeeById(int id) throws Exception {
-        Employee emp = service.getEmployeeById(id);
-        return buildResponse(emp != null ? 200 : 404, emp);
+        Optional<Employee> emp = service.getEmployeeById(id);
+        return buildResponse(emp.isPresent() ? 200 : 404, emp.get());
     }
 
     public Map<String, Object> createEmployee(String body) throws Exception {
         Employee employee = objectMapper.readValue(body, Employee.class);
-        boolean success = service.createEmployee(employee);
-        return buildResponse(success ? 201 : 400, null);
+        Optional<String> success = service.createEmployee(employee);
+        return buildResponse(success.isPresent() ? 201 : 400, success.get());
     }
 
     public Map<String, Object> updateEmployee(int id, String body) throws Exception {
         Employee employee = objectMapper.readValue(body, Employee.class);
-        boolean success = service.updateEmployee(id, employee);
-        return buildResponse(success ? 200 : 400, null);
+        Optional<String> success = service.updateEmployee(id, employee);
+        return buildResponse(success.isPresent() ? 200 : 400, success.get());
     }
 
     public Map<String, Object> deleteEmployee(int id) throws Exception {
-        boolean success = service.deleteEmployee(id);
-        return buildResponse(success ? 200 : 404, null);
+        Optional<String> success = service.deleteEmployee(id);
+        return buildResponse(success.isPresent() ? 200 : 404, success.get());
+    }
+    
+    public Map<String, Object> deleteAllEmployees() throws Exception {
+        Optional<String> success = service.deleteAllEmployees();
+        return buildResponse(success.isPresent() ? 200 : 404, success.get());
+    }
+
+    public Map<String, Object> getTop10EmployeesWithBetterSalaries() throws Exception {
+        List<Employee> top10 = service.getTop10EmployeesWithBetterSalaries();
+        return buildResponse(200, top10);
     }
 
     private Map<String, Object> buildResponse(int statusCode, Object body) throws JsonProcessingException {

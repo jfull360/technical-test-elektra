@@ -87,6 +87,9 @@ public class Main implements RequestStreamHandler {
                         int id = Integer.parseInt(path.substring(path.lastIndexOf("/") + 1));
                         response = controller.deleteEmployee(id);
                     }
+                    else if (path.matches("/all-employees")) {
+                        response = controller.deleteAllEmployees();
+                    }
                     break;
 
                 default:

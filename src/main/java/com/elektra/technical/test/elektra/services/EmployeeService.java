@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
@@ -36,24 +37,24 @@ public class EmployeeService {
         return repository.getAllEmployees();
     }
 
-    public Employee getEmployeeById(int id) throws SQLException {
-        return new Employee();
-        //return repository.getEmployeeById(id);
+    public Optional<Employee> getEmployeeById(int id) throws SQLException {
+        return repository.getEmployeeById(id);
     }
 
-    public boolean createEmployee(Employee employee) throws SQLException {
-        return true;
-        //return repository.insertEmployee(employee);
+    public Optional<String> createEmployee(Employee employee) throws SQLException {
+        return repository.postEmployee(employee);
     }
 
-    public boolean updateEmployee(int id, Employee updated) throws SQLException {
-        return true;
-        //return repository.updateEmployee(id, updated);
+    public Optional<String> updateEmployee(int id, Employee updated) throws SQLException {
+        return repository.putEmployee(id, updated);
     }
 
-    public boolean deleteEmployee(int id) throws SQLException {
-        return true;
-        //return repository.deleteEmployee(id);
+    public Optional<String> deleteEmployee(int id) throws SQLException {
+        return repository.deleteEmployeeById(id);
+    }
+
+    public Optional<String> deleteAllEmployees() throws SQLException {
+        return repository.deleteAllEmployees();
     }
 
     //Función para reutilizar el codigo si es necesario
