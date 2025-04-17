@@ -7,6 +7,7 @@ package com.elektra.technical.test.elektra.services;
 import com.elektra.technical.test.elektra.models.Employee;
 import com.elektra.technical.test.elektra.repositories.EmployeeRepository;
 import com.elektra.technical.test.elektra.threads.EmployeeThreadProcessor;
+import com.elektra.technical.test.elektra.utils.SecretsManagerUtil;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -14,6 +15,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -23,13 +25,32 @@ public class EmployeeService {
 
     private final EmployeeRepository repository;
 
-    public EmployeeService() throws SQLException {
-        //Credenciales para probar en una BD local
-        Connection connection = DriverManager.getConnection(
-                "jdbc:mysql://localhost:3306/bd_de_prueba",
-                "jorge",
-                "1234_Test"
-        );
+    public EmployeeService() throws Exception {
+        // Se obtiene la variable de entorno SECRET_ARN que previamente creamos en aws.amazon.com/lambda
+        // Get SECRET_ARN environment variable created in aws.amazon.com/lambda
+        String secretName = System.getenv("SECRET_ARN");
+
+        // Se obtiene el mapa de valores del secreto desde AWS Secrets Manager
+        // Obtaining the secret value map from AWS Secrets Manager
+        Map<String, String> secret = SecretsManagerUtil.getDatabaseSecret(secretName, "us-east-1");
+
+        // Se extraen las credenciales para acceder ala BD de AWS
+        // Get credentials to access the AWS DB
+        String host = secret.get("host");
+        String username = secret.get("username");
+        String password = secret.get("password");
+        String dbname = secret.get("dbInstanceIdentifier");
+
+        // URL de conexión a la base de datos
+        // Database connection URL
+        String url = "jdbc:mysql://" + host + ":3306/" + dbname + "?useSSL=false&allowPublicKeyRetrieval=true";
+
+        // Se crea la conexión a la base de datos
+        // Connection to the database is created
+        Connection connection = DriverManager.getConnection(url, username, password);
+
+        // Se inicializa el repositorio con la conexión
+        // The repository is initialized with the connection
         this.repository = new EmployeeRepository(connection);
     }
 

@@ -23,21 +23,21 @@ public class EmployeeController {
         EmployeeService tempService;
         try { //Manejamos las posibles excepciones (We handle possible exceptions)
             tempService = new EmployeeService();
-        } catch (SQLException e) {
+        } catch (Exception e) {
             e.printStackTrace();
-            throw new RuntimeException("Se presento un error al inicializar el service (An error occurred while initializing the service)", e);
+            throw new RuntimeException("Se presentó un error al inicializar el service (An error occurred while initializing the service)", e);
         }
         this.service = tempService;
     }
 
     public Map<String, Object> getAllEmployees() throws Exception {
         List<Employee> employees = service.getAllEmployees();
-        return buildResponse(200, employees);
+        return buildResponse(200, employees.isEmpty() ? "Lo sentimos, aun no existen empleados / Sorry, there are no employees yet." : employees);
     }
 
     public Map<String, Object> getEmployeeById(int id) throws Exception {
         Optional<Employee> emp = service.getEmployeeById(id);
-        return buildResponse(emp.isPresent() ? 200 : 404, emp.get());
+        return buildResponse(emp.isPresent() ? 200 : 404, emp.isPresent() ? emp.get() : "Lo sentimos, no se encontro el empleado con el ID " + id + " / Sorry, employee with ID " + id + " not found.");
     }
 
     public Map<String, Object> createEmployee(String body) throws Exception {
@@ -56,7 +56,7 @@ public class EmployeeController {
         Optional<String> success = service.deleteEmployee(id);
         return buildResponse(success.isPresent() ? 200 : 404, success.get());
     }
-    
+
     public Map<String, Object> deleteAllEmployees() throws Exception {
         Optional<String> success = service.deleteAllEmployees();
         return buildResponse(success.isPresent() ? 200 : 404, success.get());
