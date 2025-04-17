@@ -107,7 +107,7 @@ public class EmployeeRepository {
             return Optional.of(message);
         } catch (SQLException ex) {
             ex.printStackTrace();
-            return Optional.of("Error al actualizar empleado: " + ex.getMessage());
+            return Optional.of("Error al actualizar el empleado: " + ex.getMessage());
         }
     }
 
